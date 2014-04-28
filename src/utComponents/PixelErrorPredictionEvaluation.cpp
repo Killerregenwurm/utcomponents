@@ -78,8 +78,8 @@ public:
 		, m_inPredictor( "InPredictor", *this )
 		, m_inIntrinsics( "Intrinsics", *this )
 		, m_outRaw( "OutRaw", *this )
-    {
-    }
+	{
+	}
 
 	void receiveRaw( const MT& raw )
 	{
@@ -88,7 +88,7 @@ public:
 		try
 		{
 			Measurement::Matrix3x3 intrinsics( m_inIntrinsics.get( raw.time() ) );
-			Measurement::Pose predicted( m_inPredictor.get( raw.time() ) );
+			Measurement::Pose predicted((const Ubitrack::Measurement::Measurement<Ubitrack::Math::Pose> &) m_inPredictor.get(raw.time()));
 			
 			// pixel position
 			Math::Vector< double, 3 > posRaw( ublas::prod( *intrinsics, raw->translation() ) );
@@ -114,7 +114,7 @@ public:
 		
 		m_lastTime = raw.time();
 		m_outRaw.send( raw );
-    }
+	}
 
 protected:
 	unsigned m_nMeasurements;
